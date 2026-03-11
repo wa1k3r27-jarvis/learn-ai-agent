@@ -1,0 +1,48 @@
+import { useRenderer, useKeyboard } from "@opentui/react"
+import { LogPanel } from "./components/LogPanel"
+import { ChatArea } from "./components/ChatArea"
+
+export function App() {
+  // Get API key from environment
+  const apiKey = process.env.OPENAI_API_KEY || ""
+  const baseURL = process.env.OPENAI_BASE_URL
+  const model = process.env.OPENAI_MODEL
+
+  const renderer = useRenderer()
+
+  // Handle keyboard shortcuts
+  useKeyboard((key) => {
+    if (key.name === "escape" || (key.ctrl && key.name === "c")) {
+      renderer.destroy()
+    }
+  })
+
+  return (
+    <box
+      flexDirection="column"
+      width="100%"
+      height="100%"
+      backgroundColor="#0a0a14"
+    >
+      {/* Header */}
+      <box
+        height={1}
+        paddingX={2}
+        backgroundColor="#1a1a2e"
+        borderBottom
+        borderStyle="single"
+        alignItems="center"
+      >
+        <text fg="#00ffff" bold>
+          AI Agent Chat - ESC to exit
+        </text>
+      </box>
+
+      {/* Main content area with sidebar */}
+      <LogPanel width={50} title="Logs">
+        {/* Chat area - Main content */}
+        <ChatArea apiKey={apiKey} baseURL={baseURL} model={model} />
+      </LogPanel>
+    </box>
+  )
+}
