@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { ChatDisplay } from "./ChatDisplay"
 import { ChatInput } from "./ChatInput"
-import { useLogger } from "./LogPanel"
+import { useLogger } from "./LogProvider"
 import { ChatAgent } from "../agent/chat"
 import type { ChatMessage, ExtendedChatMessage } from "../agent/types"
 

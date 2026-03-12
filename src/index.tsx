@@ -1,6 +1,7 @@
 import { createCliRenderer } from "@opentui/core"
 import { createRoot } from "@opentui/react"
 import { App } from "./App"
+import { LogProvider } from "./components/LogProvider"
 
 // Validate environment
 if (!process.env.OPENAI_API_KEY) {
@@ -14,4 +15,8 @@ const renderer = await createCliRenderer({
   useMouse: true,
 })
 
-createRoot(renderer).render(<App />)
+createRoot(renderer).render(
+  <LogProvider>
+    <App />
+  </LogProvider>
+)
