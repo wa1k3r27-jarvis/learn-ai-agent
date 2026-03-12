@@ -16,12 +16,7 @@ export class ChatAgent {
     this.toolRegistry = new ToolRegistry()
 
     if (enableTools) {
-      // Register all built-in tools
-      this.toolRegistry.register(builtinTools.getCurrentTimeTool)
-      this.toolRegistry.register(builtinTools.getSystemInfoTool)
-      this.toolRegistry.register(builtinTools.readFileTool)
-      this.toolRegistry.register(builtinTools.writeFileTool)
-      this.toolRegistry.register(builtinTools.listFilesTool)
+      // Register built-in tool
       this.toolRegistry.register(builtinTools.executeCodeTool)
     }
   }
