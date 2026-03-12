@@ -1,5 +1,6 @@
-import { useState, useEffect, createContext, useContext } from "react"
+import { useState, useEffect, createContext, useContext, useRef } from "react"
 import { useTerminalDimensions } from "@opentui/react"
+import type { ScrollBoxRenderable } from "@opentui/core"
 
 export interface LogEntry {
   id: number
@@ -45,6 +46,15 @@ export function LogPanel({ width = 40, title = "Logs", children }: LogPanelProps
     }
   ])
   const dims = useTerminalDimensions()
+  const scrollBoxRef = useRef<ScrollBoxRenderable>(null)
+
+  // Auto-scroll to bottom when new logs are added
+  useEffect(() => {
+    if (scrollBoxRef.current && logs.length > 1) {
+      // Scroll to the bottom using scrollTo method
+      scrollBoxRef.current.scrollTo(scrollBoxRef.current.scrollHeight)
+    }
+  }, [logs.length])
 
   // Add a log entry
   const addLog = (level: LogEntry["level"], message: string) => {
@@ -107,21 +117,26 @@ export function LogPanel({ width = 40, title = "Logs", children }: LogPanelProps
           flexDirection="column"
           backgroundColor="#0a0a14"
           borderStyle="single"
-          borderRight
+          border={["right"]}
         >
           {/* Header */}
           <box
             height={2}
             paddingX={1}
             backgroundColor="#1a1a2e"
-            borderBottom
+            border={["bottom"]}
             borderStyle="single"
           >
-            <text bold fg="#00ffff">{title}</text>
+            <text fg="#00ffff" attributes={1}>{title}</text>
           </box>
 
-          {/* Log entries */}
-          <box flexGrow={1} paddingX={1} flexDirection="column">
+          {/* Log entries with scroll */}
+          <scrollbox
+            ref={scrollBoxRef}
+            flexGrow={1}
+            paddingX={1}
+            backgroundColor="#0a0a14"
+          >
             {logs.map((log) => (
               <box key={log.id} flexDirection="row" marginBottom={0}>
                 <text fg="#666666" width={8}>{log.timestamp}</text>
@@ -129,14 +144,14 @@ export function LogPanel({ width = 40, title = "Logs", children }: LogPanelProps
                 <text fg="#ffffff">{log.message}</text>
               </box>
             ))}
-          </box>
+          </scrollbox>
 
           {/* Footer with log count */}
           <box
             height={1}
             paddingX={1}
             backgroundColor="#1a1a2e"
-            borderTop
+            border={["top"]}
             borderStyle="single"
           >
             <text fg="#888888">{logs.length} entries</text>

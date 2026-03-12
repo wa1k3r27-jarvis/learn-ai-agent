@@ -1,8 +1,8 @@
 import { Message } from "./Message"
-import type { ChatMessage } from "../agent/types"
+import type { ExtendedChatMessage } from "../agent/types"
 
 interface ChatDisplayProps {
-  messages: ChatMessage[]
+  messages: ExtendedChatMessage[]
 }
 
 export function ChatDisplay({ messages }: ChatDisplayProps) {

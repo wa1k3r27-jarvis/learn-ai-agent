@@ -29,11 +29,11 @@ export function App() {
         height={1}
         paddingX={2}
         backgroundColor="#1a1a2e"
-        borderBottom
+        border={["bottom"]}
         borderStyle="single"
         alignItems="center"
       >
-        <text fg="#00ffff" bold>
+        <text fg="#00ffff" attributes={1}>
           AI Agent Chat - ESC to exit
         </text>
       </box>

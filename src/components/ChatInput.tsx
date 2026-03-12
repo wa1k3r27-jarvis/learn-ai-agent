@@ -22,7 +22,6 @@ export function ChatInput({ onSubmit, disabled }: ChatInputProps) {
       paddingX={2}
       paddingY={1}
       border
-      borderTop
       backgroundColor="#1a1a2e"
     >
       <text fg="#888888" marginBottom={1} height={1}>
@@ -33,7 +32,6 @@ export function ChatInput({ onSubmit, disabled }: ChatInputProps) {
         onChange={setValue}
         onSubmit={handleSubmit}
         placeholder="Enter message..."
-        disabled={disabled}
         focused={!disabled}
       />
       <box flexGrow={1} />
