@@ -1,4 +1,3 @@
-import { useRenderer, useKeyboard } from "@opentui/react"
 import { LogPanel } from "./components/LogPanel"
 import { ChatArea } from "./components/ChatArea"
 
@@ -7,15 +6,6 @@ export function App() {
   const apiKey = process.env.OPENAI_API_KEY || ""
   const baseURL = process.env.OPENAI_BASE_URL
   const model = process.env.OPENAI_MODEL
-
-  const renderer = useRenderer()
-
-  // Handle keyboard shortcuts
-  useKeyboard((key) => {
-    if (key.name === "escape" || (key.ctrl && key.name === "c")) {
-      renderer.destroy()
-    }
-  })
 
   return (
     <box

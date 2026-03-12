@@ -11,7 +11,7 @@ if (!process.env.OPENAI_API_KEY) {
 }
 
 const renderer = await createCliRenderer({
-  exitOnCtrlC: false, // We handle it in the app
+  exitOnCtrlC: true, // We handle it in the app
   useMouse: true,
 })
 
