@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { ChatDisplay } from "./ChatDisplay"
 import { ChatInput } from "./ChatInput"
-import { useLogger } from "./LogProvider"
 import { ChatAgent } from "../agent/chat"
 import type { ChatMessage, ExtendedChatMessage } from "../agent/types"
 
@@ -19,18 +18,17 @@ interface ChatAreaProps {
 export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
   const [messages, setMessages] = useState<ExtendedChatMessage[]>([SYSTEM_PROMPT])
   const [loading, setLoading] = useState(false)
-  const logger = useLogger()
 
   const agent = new ChatAgent({ apiKey, baseURL, model })
 
   // Log when component mounts
   useEffect(() => {
-    logger.addLog("info", "Chat area initialized with tool support")
+    console.info("Chat area initialized with tool support")
   }, [])
 
   const handleSubmit = async (userMessage: string) => {
     // Log user message
-    logger.addLog("info", `User: ${userMessage.substring(0, 50)}${userMessage.length > 50 ? "..." : ""}`)
+    console.info(`User: ${userMessage.substring(0, 50)}${userMessage.length > 50 ? "..." : ""}`)
 
     // Add user message
     const newMessages: ExtendedChatMessage[] = [
@@ -45,10 +43,7 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
       const requestUrl = `${baseURL || "https://api.openai.com/v1"}/chat/completions`
       const requestModel = model || "gpt-3.5-turbo"
 
-      logger.addLog("debug", `API Request:`)
-      logger.addLog("debug", `  URL: ${requestUrl}`)
-      logger.addLog("debug", `  Model: ${requestModel}`)
-      logger.addLog("debug", `  Stream: true (with tools)`)
+      console.debug("API Request:", `URL: ${requestUrl}`, `Model: ${requestModel}`, "Stream: true (with tools)")
 
       // Convert to ExtendedChatMessage and stream with tools
       let currentMessages: ExtendedChatMessage[] = [...newMessages]
@@ -76,7 +71,7 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
 
           case 'tool_call':
             if (event.toolCall) {
-              logger.addLog("info", `Tool called: ${event.toolCall.function.name}`)
+              console.info(`Tool called: ${event.toolCall.function.name}`)
               toolMessages.push({
                 role: "assistant",
                 content: currentContent || null,
@@ -92,7 +87,7 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
           case 'tool_result':
             if (event.toolResult) {
               const preview = event.toolResult.content.substring(0, 50)
-              logger.addLog("info", `Tool result: ${preview}${event.toolResult.content.length > 50 ? "..." : ""}`)
+              console.info(`Tool result: ${preview}${event.toolResult.content.length > 50 ? "..." : ""}`)
               toolMessages.push({
                 role: "tool",
                 tool_call_id: event.toolResult.tool_call_id,
@@ -107,7 +102,7 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
 
           case 'error':
             if (event.error) {
-              logger.addLog("error", `Error: ${event.error}`)
+              console.error(`Error: ${event.error}`)
             }
             break
 
@@ -144,8 +139,8 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
       }
 
       // Log completion
-      logger.addLog("info", `Final response: ${currentContent.substring(0, 50)}${currentContent.length > 50 ? "..." : ""}`)
-      logger.addLog("debug", "Stream completed successfully")
+      console.info(`Final response: ${currentContent.substring(0, 50)}${currentContent.length > 50 ? "..." : ""}`)
+      console.debug("Stream completed successfully")
 
       // Update final messages state
       setMessages(currentMessages)
@@ -153,7 +148,7 @@ export function ChatArea({ apiKey, baseURL, model }: ChatAreaProps) {
     } catch (error) {
       // Log error
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
-      logger.addLog("error", `Error: ${errorMessage}`)
+      console.error(`Error: ${errorMessage}`)
 
       setMessages([
         ...messages,

@@ -1,4 +1,3 @@
-import { LogPanel } from "./components/LogPanel"
 import { ChatArea } from "./components/ChatArea"
 
 export function App() {
@@ -6,7 +5,6 @@ export function App() {
   const apiKey = process.env.OPENAI_API_KEY || ""
   const baseURL = process.env.OPENAI_BASE_URL
   const model = process.env.OPENAI_MODEL
-
   return (
     <box
       flexDirection="column"
@@ -28,11 +26,8 @@ export function App() {
         </text>
       </box>
 
-      {/* Main content area with sidebar */}
-      <LogPanel width={50} title="Logs">
-        {/* Chat area - Main content */}
-        <ChatArea apiKey={apiKey} baseURL={baseURL} model={model} />
-      </LogPanel>
+      {/* Main content area */}
+      <ChatArea apiKey={apiKey} baseURL={baseURL} model={model} />
     </box>
   )
 }

@@ -1,7 +1,6 @@
-import { createCliRenderer } from "@opentui/core"
+import { createCliRenderer, ConsolePosition } from "@opentui/core"
 import { createRoot } from "@opentui/react"
 import { App } from "./App"
-import { LogProvider } from "./components/LogProvider"
 
 // Validate environment
 if (!process.env.OPENAI_API_KEY) {
@@ -13,10 +12,20 @@ if (!process.env.OPENAI_API_KEY) {
 const renderer = await createCliRenderer({
   exitOnCtrlC: true, // We handle it in the app
   useMouse: true,
+  consoleOptions: {
+    position: ConsolePosition.RIGHT,
+    sizePercent: 30,
+    colorInfo: "#00ffff",
+    colorWarn: "#ffff00",
+    colorError: "#ff0000",
+    colorDebug: "#888888",
+    backgroundColor: "#0a0a14",
+    title: "Logs",
+    titleBarColor: "#1a1a2e",
+    titleBarTextColor: "#00ffff",
+    maxStoredLogs: 100,
+  },
 })
+renderer.console.toggle()
 
-createRoot(renderer).render(
-  <LogProvider>
-    <App />
-  </LogProvider>
-)
+createRoot(renderer).render(<App />)
